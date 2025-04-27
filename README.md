@@ -5,6 +5,6 @@ Repositório de implementação em Rust dos algoritmos exponenciais e aproximado
 
 Feito por:
 
-Marcos Paulo Gomes Pires
-Osvaldo Pagioli de Lollo Silva
+Marcos Paulo Gomes Pires,
+Osvaldo Pagioli de Lollo Silva,
 Vinicius Lima Carvalho
