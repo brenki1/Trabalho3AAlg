@@ -1,0 +1,34 @@
+Seja min_caixas e empacot_min variáveis globais que representam, respectivamente, o mínimo de caixas necessárias para o empacotamento e o empacotamento mínimo executado, P o vetor que contém o peso de todos os trabalhos e C a capacidade máxima da caixa o algoritmo que encontra a solução exata de do empacotamento mínimo é dado por:
+
+algoritmo enconta_empacotamento(P, C, peso_caixas, itens_caixa, n, i, k){
+01-   if(i > n)
+02-      then min_caixas <- min(min_caixas, k)
+03-              empacot_min <- itens_caixa
+04-      return
+05-   for j <- 1 to k
+06-      if(peso_caixas[j] ≥ P[i])
+07-         then peso_caixas[j] <- peso_caixas[j] - P[i]
+08-                 itens_caixa[j] <- itens_caixa[j] U {P[i]}
+09-                 enconta_empacotamento(P, C, peso_caixas, itens_caixa, n, i +1,k)
+10-                 itens_caixa[j] <- itens_caixa[j] - {P[i]}
+11-                 peso_caixas[j] <- peso_caixas[j] + P[i]
+12-  peso_caixas[k+1] <- peso_caixas[k+1] - P[i]
+13-  itens_caixa[k+1] <- itens_caixa[k+1] U {P[i]}
+14- enconta_empacotamento(P, C, peso_caixas, itens_caixa, n, i +1,k+1)
+15- peso_caixas[k+1] <- peso_caixas[k+1] + P[i]
+16- itens_caixa[k+1] <- itens_caixa[k+1] - {P[i]}
+17- return
+
+
+
+algoritmo_empacotamento_minimo(P, C){
+1-   n <- |P|
+2-   peso_caixas[1..n]
+3-   itens_caixas[1..n]
+4-   for i <- 1 to n
+5-      peso_caixas[i] <- C
+6-      itens_caixas[i] <- Ø
+7-   min_caixas <- n
+8-   empacot_min <- Ø
+9-  encontra_empacotamento(P, C, peso_caixas, itens_caixa, n, 1, 1)
+10- return min_caixas, empacot_min
