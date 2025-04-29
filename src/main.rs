@@ -2,7 +2,7 @@ use std::time::Instant;
 use rand::Rng;
 
 fn main() {
-    let n = 2;
+    let n = 30;
     let c = 10;
     let mut vetor: Vec<i32> = vec![0;n as usize];
 
@@ -98,4 +98,36 @@ fn empacotamento_minimo(p: Vec<i32>, c: i32) -> (usize, Vec<Vec<i32>>) {
     encontra_empacotamento(&p, c, &mut peso_caixas, &mut itens_caixa, n, 0, 0, &mut min_caixas, &mut empacot_min);
 
     (min_caixas, empacot_min)
+}
+
+fn algoritmo_nextfit_aproximado(p: &[u32], c: u32) -> (Vec<(u32, Vec<u32>)>, usize) {
+    let n = p.len();
+    let mut bins: Vec<(u32, Vec<u32>)> = Vec::new();
+    let mut k = 0;
+    let mut cap_restante = c;
+
+    bins.push((c, Vec::new())); // bins[0] inicial
+
+    for &item in p {
+        if item <= cap_restante {
+            // Cabe no bin atual
+            bins[k].1.push(item);
+            cap_restante -= item;
+        } else {
+            // Fechar o bin atual
+            bins[k].0 = cap_restante;
+
+            // Abrir novo bin
+            bins.push((c - item, vec![item]));
+            k += 1;
+            cap_restante = c - item;
+        }
+    }
+
+    // Atualiza capacidade restante do último bin
+    if cap_restante < c {
+        bins[k].0 = cap_restante;
+    }
+
+    (bins, k + 1)
 }
