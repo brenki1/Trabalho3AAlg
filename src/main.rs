@@ -2,7 +2,7 @@ use std::time::Instant;
 use rand::Rng;
 
 fn main() {
-    let n = 30;
+    let n = 100;
     let c = 10;
     let mut vetor: Vec<i32> = vec![0;n as usize];
 
@@ -18,6 +18,7 @@ fn main() {
 
     println!("");
 
+    /* 
     let inicio = Instant::now();
     let (min_caixas, empacot_min) = empacotamento_minimo(vetor, c);
     let fim = Instant::now();
@@ -28,6 +29,20 @@ fn main() {
     }
 
     println!("Tempo de execução algoritmo exponencial: {:?}", fim-inicio);
+    */
+
+    let inicio = Instant::now();
+    let (bins, total_bins) = algoritmo_nextfit_aproximado(&vetor, c);
+    let fim = Instant::now();
+
+    println!("Total de bins usados: {}", total_bins);
+    for (i, (restante, conteudo)) in bins.iter().enumerate() {
+        println!("Bin {}: itens = {:?}, capacidade restante = {}", i + 1, conteudo, restante);
+    }
+
+    println!("Tempo exec alg aprox: {:?}", fim-inicio);
+
+
 }
 
 fn gera_vetor_trabalhos(l: &mut Vec<i32>, n: i32){
@@ -100,34 +115,36 @@ fn empacotamento_minimo(p: Vec<i32>, c: i32) -> (usize, Vec<Vec<i32>>) {
     (min_caixas, empacot_min)
 }
 
-fn algoritmo_nextfit_aproximado(p: &[u32], c: u32) -> (Vec<(u32, Vec<u32>)>, usize) {
-    let n = p.len();
-    let mut bins: Vec<(u32, Vec<u32>)> = Vec::new();
+fn algoritmo_nextfit_aproximado(pesos: &Vec<i32>, capacidade: i32) -> (Vec<(i32, Vec<i32>)>, usize) {
+    let mut bins: Vec<(i32, Vec<i32>)> = Vec::new();
     let mut k = 0;
-    let mut cap_restante = c;
+    let mut cap_restante = capacidade;
 
-    bins.push((c, Vec::new())); // bins[0] inicial
+    // Inicializa o primeiro bin
+    bins.push((capacidade, Vec::new()));
 
-    for &item in p {
-        if item <= cap_restante {
+    for &peso in pesos {
+        if peso <= cap_restante {
             // Cabe no bin atual
-            bins[k].1.push(item);
-            cap_restante -= item;
+            bins[k].1.push(peso);
+            cap_restante -= peso;
+            
         } else {
-            // Fechar o bin atual
+            // Atualiza capacidade restante do bin atual
             bins[k].0 = cap_restante;
 
-            // Abrir novo bin
-            bins.push((c - item, vec![item]));
+            // Cria novo bin
             k += 1;
-            cap_restante = c - item;
+            cap_restante = capacidade - peso;
+            bins.push((cap_restante, vec![peso]));
+            
         }
     }
 
-    // Atualiza capacidade restante do último bin
-    if cap_restante < c {
+    // Atualiza capacidade restante do último bin, se necessário
+    if cap_restante < capacidade {
         bins[k].0 = cap_restante;
     }
 
-    (bins, k + 1)
+    (bins, k + 1) // k+1 é o total de bins usados
 }
