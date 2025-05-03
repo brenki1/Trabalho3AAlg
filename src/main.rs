@@ -2,7 +2,7 @@ use std::time::Instant;
 use rand::Rng;
 
 fn main() {
-    let n = 100;
+    let n = 20;
     let c = 10;
     let mut vetor: Vec<i32> = vec![0;n as usize];
 
@@ -18,9 +18,9 @@ fn main() {
 
     println!("");
 
-    /* 
+    
     let inicio = Instant::now();
-    let (min_caixas, empacot_min) = empacotamento_minimo(vetor, c);
+    let (min_caixas, empacot_min) = empacotamento_minimo(vetor.clone(), c);
     let fim = Instant::now();
 
     println!("Mínimo de caixas necessárias: {}", min_caixas);
@@ -29,7 +29,7 @@ fn main() {
     }
 
     println!("Tempo de execução algoritmo exponencial: {:?}", fim-inicio);
-    */
+    
 
     let inicio = Instant::now();
     let (bins, total_bins) = algoritmo_nextfit_aproximado(&vetor, c);
