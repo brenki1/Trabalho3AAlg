@@ -120,12 +120,12 @@ fn algoritmo_nextfit_aproximado(pesos: &Vec<i32>, capacidade: i32) -> (Vec<(i32,
     let mut k = 0;
     let mut cap_restante = capacidade;
 
-    // Inicializa o primeiro bin
+    
     bins.push((capacidade, Vec::new()));
 
     for &peso in pesos {
         if peso <= cap_restante {
-            // Cabe no bin atual
+            
             bins[k].1.push(peso);
             cap_restante -= peso;
             
@@ -141,7 +141,7 @@ fn algoritmo_nextfit_aproximado(pesos: &Vec<i32>, capacidade: i32) -> (Vec<(i32,
         }
     }
 
-    // Atualiza capacidade restante do último bin, se necessário
+   
     if cap_restante < capacidade {
         bins[k].0 = cap_restante;
     }
